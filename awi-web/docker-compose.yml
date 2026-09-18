@@ -1,0 +1,34 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker-setup/backend.Dockerfile
+    container_name: awi-backend
+    ports:
+      - "3000:3000"
+    volumes:
+      # Az adatbázis és a feltöltött képek a konténeren KÍVÜL is megmaradnak,
+      # újraindítás/rebuild után sem vesznek el.
+      - ./avi-admin-backend/data:/app/data
+      - ./avi-admin-backend/uploads:/app/uploads
+    environment:
+      - PORT=3000
+      # Ide írhatod majd az SMTP adatokat, ha az e-mail értesítést élesben
+      # is szeretnéd használni:
+      # - SMTP_HOST=smtp.example.com
+      # - SMTP_USER=...
+      # - SMTP_PASS=...
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker-setup/frontend.Dockerfile
+    container_name: awi-frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      # Élő kódszerkesztés: a gépeden módosított fájlok azonnal
+      # látszanak a konténerben is, nem kell újraépíteni az image-et.
+      - ./avi-admin/src:/app/src
+    depends_on:
+      - backend

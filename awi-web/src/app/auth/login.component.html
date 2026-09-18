@@ -1,0 +1,46 @@
+<div class="login-page">
+  <div class="login-card">
+    
+    <h1>Awi Hegesztés admin</h1>
+    <p class="subtitle">Jelentkezz be a felhasználók kezeléséhez.</p>
+
+
+
+    <form (ngSubmit)="onSubmit()">
+      <!-- Felhasználónév mező animált felirattal -->
+      <div class="field">
+        <span class="icon">👤</span>
+        <input 
+          type="text" 
+          id="username"
+          placeholder=" " 
+          [(ngModel)]="username" 
+          name="username" 
+          required 
+        />
+        <label for="username">Username</label>
+      </div>
+
+      <!-- Jelszó mező animált felirattal -->
+      <div class="field">
+        <span class="icon">🔒</span>
+        <input 
+          type="password" 
+          id="password"
+          placeholder=" " 
+          [(ngModel)]="password" 
+          name="password" 
+          required 
+        />
+        <label for="password">Password</label>
+      </div>
+
+   
+
+      <button type="submit" [disabled]="loading">
+        {{ loading ? 'BETÖLTÉS...' : 'LOGIN' }}
+      </button>
+    </form>
+
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="admin-shell">
+    <aside class="sidebar">
+      <div class="sidebar-logo">Awi Hegesztés</div>
+  
+      <nav class="sidebar-nav">
+        <a routerLink="/admin/dashboard" routerLinkActive="active">Irányítópult</a>
+        <a routerLink="/admin/orders" routerLinkActive="active">Rendelések</a>
+        <a routerLink="/admin/users" routerLinkActive="active">Felhasználók</a>
+        <a routerLink="/admin/site" routerLinkActive="active">Weboldal</a>
+        <a routerLink="/admin/profile" routerLinkActive="active">Profilom</a>
+        <a *ngIf="isAdmin" routerLink="/admin/audit" routerLinkActive="active">Napló</a>
+      </nav>
+  
+      <button class="logout-btn" (click)="logout()">Kijelentkezés</button>
+    </aside>
+  
+    <main class="admin-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>

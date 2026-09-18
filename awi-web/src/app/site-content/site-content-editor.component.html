@@ -1,0 +1,54 @@
+<div class="editor-container">
+  <header class="page-header">
+    <h1>Weboldal szövegei</h1>
+    <p class="subtitle">Ez a tartalom jelenik meg a nyilvános Awi Hegesztés weboldalon.</p>
+  </header>
+
+  <!-- Csak akkor jelenik meg, ha loading === true -->
+  <div *ngIf="loading" class="state-msg">
+    <p>Betöltés...</p>
+  </div>
+
+  <!-- Hiba / Sikeres mentés üzenetek -->
+  <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+  <div *ngIf="saved" class="alert alert-success">Változtatások sikeresen elmentve!</div>
+
+  <!-- Csak akkor jelenik meg, ha loading === false -->
+  <form *ngIf="!loading" (ngSubmit)="onSave()" class="editor-form">
+
+    <section class="form-section">
+      <h2>Hero (Főoldal fejléce)</h2>
+
+      <div class="field">
+        <label for="heroTitle">Főcímsor *</label>
+        <input id="heroTitle" type="text" [(ngModel)]="content.heroTitle" name="heroTitle" required />
+      </div>
+
+      <div class="field">
+        <label for="heroLead">Bevezető szöveg (Lead) *</label>
+        <textarea id="heroLead" rows="3" [(ngModel)]="content.heroLead" name="heroLead" required></textarea>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <h2>Kapcsolati adatok</h2>
+      <div class="grid-2">
+        <div class="field">
+          <label for="contactPhone">Telefonszám</label>
+          <input id="contactPhone" type="text" [(ngModel)]="content.contactPhone" name="contactPhone" />
+        </div>
+        <div class="field">
+          <label for="contactEmail">E-mail cím</label>
+          <input id="contactEmail" type="email" [(ngModel)]="content.contactEmail" name="contactEmail" />
+        </div>
+      </div>
+    </section>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-save" [disabled]="saving">
+        {{ saving ? 'Mentés...' : 'Mentés' }}
+      </button>
+    </div>
+
+  </form>
+</div>

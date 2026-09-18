@@ -1,0 +1,42 @@
+<div class="user-form-page">
+  <h1>{{ isEditMode ? 'Felhasználó szerkesztése' : 'Új felhasználó' }}</h1>
+
+  @if (loading) {
+    <p>Betöltés...</p>
+  } @else {
+    <form (ngSubmit)="onSubmit()">
+      @if (error) {
+        <p class="error">{{ error }}</p>
+      }
+
+      <div class="field">
+        <label for="name">Név</label>
+        <input id="name" name="name" type="text" [(ngModel)]="form.name" required />
+      </div>
+
+      <div class="field">
+        <label for="email">E-mail cím</label>
+        <input id="email" name="email" type="email" [(ngModel)]="form.email" required />
+      </div>
+
+      <div class="field">
+        <label for="role">Szerepkör</label>
+        <select id="role" name="role" [(ngModel)]="form.role">
+          <option value="admin">admin</option>
+          <option value="editor">editor</option>
+          <option value="viewer">viewer</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="password">{{ isEditMode ? 'Új jelszó (üresen hagyva nem változik)' : 'Jelszó' }}</label>
+        <input id="password" name="password" type="password" [(ngModel)]="form.password" />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="saving">{{ saving ? 'Mentés...' : 'Mentés' }}</button>
+        <button type="button" class="cancel" (click)="onCancel()">Mégsem</button>
+      </div>
+    </form>
+  }
+</div>

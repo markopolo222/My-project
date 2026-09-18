@@ -1,0 +1,113 @@
+:host {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+}
+
+// A teljes képernyős háttér
+.login-page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.85)),
+              url('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=1920&auto=format&fit=crop') no-repeat center center / cover;
+  padding: 20px;
+  box-sizing: border-box;
+
+  .login-card {
+    background: rgba(255, 255, 255, 0.96);
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #d9d2c3;
+    border-radius: 4px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+
+    h1 {
+      font-family: 'Archivo Expanded', sans-serif;
+      font-size: 24px;
+      color: #201d1a;
+      margin: 0 0 6px;
+      text-align: center;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #4d5257;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .error {
+      color: #b83b1f;
+      font-size: 14px;
+      background-color: #fdf2f0;
+      border: 1px solid #f5c6cb;
+      padding: 10px;
+      border-radius: 3px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .field {
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+
+      label {
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: #4d5257;
+        margin-bottom: 6px;
+      }
+
+      input {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1px solid #d9d2c3;
+        border-radius: 3px;
+        font-size: 14px;
+        color: #201d1a;
+        background: #fff;
+        box-sizing: border-box;
+        outline: none;
+        transition: border-color 0.2s;
+
+        &:focus {
+          border-color: #201d1a;
+        }
+      }
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      background-color: #201d1a;
+      color: #f4f1ea;
+      border: none;
+      border-radius: 3px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 5px;
+
+      &:hover:not([disabled]) {
+        background-color: #383430;
+      }
+
+      &[disabled] {
+        background-color: #a39e93;
+        cursor: not-allowed;
+      }
+    }
+  }
+}

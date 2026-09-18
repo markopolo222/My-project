@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Awi Hegesztés — Ipari hegesztés és fémmegmunkálás</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal: #201d1a;
+    --charcoal-2: #2b2723;
+    --steel: #4d5257;
+    --steel-light: #8b9298;
+    --bone: #ece7dd;
+    --bone-2: #d9d2c3;
+    --weld: #e8672b;
+    --weld-dim: #b84f21;
+    --arc: #cfe0e6;
+    --radius: 3px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bone);
+    color: var(--charcoal);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  h1, h2, h3, .display {
+    font-family: 'Archivo Expanded', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- Weld seam divider (reused motif) ---------- */
+  .seam {
+    height: 3px;
+    width: 100%;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--weld) 0px, var(--weld) 14px,
+      transparent 14px, transparent 20px
+    );
+    opacity: 0.9;
+  }
+
+  /* ---------- Nav ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--charcoal);
+  }
+  nav.wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 76px;
+  }
+  .logo {
+    color: var(--bone);
+    font-family: 'Archivo Expanded', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .logo span { color: var(--weld); }
+  .navlinks {
+    display: flex;
+    gap: 36px;
+    color: var(--bone-2);
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .navlinks a { position: relative; padding: 4px 0; transition: color .2s ease; }
+  .navlinks a:hover { color: var(--bone); }
+  .navlinks a::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: -2px;
+    width: 0; height: 2px;
+    background: var(--weld);
+    transition: width .25s ease;
+  }
+  .navlinks a:hover::after { width: 100%; }
+  .nav-cta {
+    background: var(--weld);
+    color: var(--charcoal) !important;
+    font-weight: 700 !important;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-size: 14px !important;
+  }
+  .nav-cta:hover { background: #ff7a3d; }
+  .nav-cta::after { display: none; }
+
+  .nav-dropdown {
+    position: relative;
+  }
+  .nav-dropdown > a::after {
+    content: "▾";
+    margin-left: 5px;
+    font-size: 11px;
+    color: var(--steel-light);
+  }
+  .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--charcoal-2);
+    border: 1px solid #3a352f;
+    border-radius: var(--radius);
+    padding: 10px;
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 220px;
+    z-index: 60;
+  }
+  .nav-dropdown:hover .dropdown-menu,
+  .nav-dropdown:focus-within .dropdown-menu {
+    display: flex;
+  }
+  .dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 3px;
+    font-size: 13.5px;
+    color: var(--bone-2);
+  }
+  .dropdown-menu a:hover {
+    background: #201d1a;
+    color: var(--bone);
+  }
+  .dropdown-menu a::after { display: none; }
+  .dropdown-icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    color: var(--weld);
+  }
+
+  @media (max-width: 760px) {
+    .navlinks .hide-mobile { display: none; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: var(--charcoal);
+    color: var(--bone);
+    padding: 96px 0 84px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero .wrap { position: relative; z-index: 2; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .eyebrow-plain {
+    color: var(--steel-light);
+    font-size: 15px;
+    margin-bottom: 18px;
+    max-width: 34ch;
+  }
+  .hero h1 {
+    font-size: clamp(38px, 5vw, 58px);
+    line-height: 1.04;
+    color: var(--bone);
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--weld);
+  }
+  .hero p.lead {
+    margin-top: 22px;
+    max-width: 46ch;
+    color: var(--bone-2);
+    font-size: 17px;
+  }
+  .hero-actions {
+    margin-top: 34px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-block;
+    padding: 14px 26px;
+    border-radius: var(--radius);
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .btn-primary { background: var(--weld); color: var(--charcoal); }
+  .btn-primary:hover { background: #ff7a3d; }
+  .btn-ghost { color: var(--bone); border-color: var(--steel); }
+  .btn-ghost:hover { border-color: var(--bone); }
+
+  .hero-figure {
+    position: relative;
+  }
+  .weld-badge {
+    background: var(--charcoal-2);
+    border: 1px solid #3a352f;
+    border-radius: var(--radius);
+    padding: 26px 28px;
+  }
+  .weld-badge .stat {
+    font-family: 'Archivo Expanded', sans-serif;
+    font-size: 44px;
+    color: var(--weld);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .weld-badge .stat-label {
+    color: var(--bone-2);
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  .weld-badge + .weld-badge { margin-top: 16px; }
+
+  /* ---------- Services ---------- */
+  .section { padding: 88px 0; }
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+  .section-head h2 { font-size: clamp(28px, 3.4vw, 38px); max-width: 16ch; }
+  .section-head p { max-width: 42ch; color: var(--steel); font-size: 15.5px; }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--bone-2);
+    border: 1px solid var(--bone-2);
+  }
+  .service-card {
+    background: var(--bone);
+    padding: 32px 28px;
+  }
+  .service-card .num {
+    font-family: 'Archivo Expanded', sans-serif;
+    font-size: 13px;
+    color: var(--weld-dim);
+    font-weight: 700;
+  }
+  .service-card h3 {
+    font-size: 20px;
+    margin-top: 14px;
+    margin-bottom: 10px;
+  }
+  .service-card p { color: var(--steel); font-size: 14.5px; }
+
+  @media (max-width: 860px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .hero-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Pricing / Offer ---------- */
+  .pricing {
+    background: var(--charcoal);
+    color: var(--bone);
+  }
+  .pricing .section-head p { color: var(--steel-light); }
+  .pricing .section-head h2 { color: var(--bone); }
+
+  .price-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .price-card {
+    background: var(--charcoal-2);
+    border: 1px solid #3a352f;
+    border-radius: var(--radius);
+    padding: 32px 26px;
+    display: flex;
+    flex-direction: column;
+  }
+  .price-card.is-featured {
+    border-color: var(--weld);
+    background: #302a24;
+  }
+  .price-card h3 { font-size: 19px; color: var(--bone); }
+  .price-card .tag {
+    font-size: 12.5px;
+    color: var(--weld);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .price-card .price {
+    font-family: 'Archivo Expanded', sans-serif;
+    font-size: 30px;
+    color: var(--bone);
+    margin: 18px 0 6px;
+  }
+  .price-card .price small {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--bone-2);
+    font-weight: 400;
+  }
+  .price-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 26px;
+    color: var(--bone-2);
+    font-size: 14.5px;
+    flex-grow: 1;
+  }
+  .price-card li {
+    padding: 9px 0;
+    border-top: 1px solid #3a352f;
+  }
+  .price-card li:first-child { border-top: none; }
+  .price-card .btn { text-align: center; width: 100%; }
+
+  @media (max-width: 860px) {
+    .price-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Offer form ---------- */
+  .offer {
+    background: var(--bone);
+  }
+  .offer-shell {
+    background: var(--charcoal-2);
+    background: #fff;
+    border: 1px solid var(--bone-2);
+    border-radius: var(--radius);
+    padding: 44px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  .offer-shell h3 { font-size: 24px; margin-bottom: 12px; }
+  .offer-shell p { color: var(--steel); font-size: 15px; max-width: 40ch; }
+  .offer-facts { margin-top: 28px; }
+  .offer-facts div {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-top: 1px solid var(--bone-2);
+    font-size: 14.5px;
+    color: var(--charcoal);
+  }
+  .offer-facts div:first-child { border-top: none; }
+  .offer-facts b { color: var(--weld-dim); min-width: 120px; }
+
+  form { display: flex; flex-direction: column; gap: 14px; }
+  label { font-size: 13.5px; color: var(--steel); font-weight: 600; }
+  input, textarea, select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--bone-2);
+    border-radius: var(--radius);
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    background: #fdfcfa;
+    color: var(--charcoal);
+  }
+  textarea { resize: vertical; min-height: 90px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  form .btn { margin-top: 6px; }
+
+  @media (max-width: 860px) {
+    .offer-shell { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    background: var(--charcoal);
+    color: var(--bone-2);
+    padding: 40px 0 32px;
+    font-size: 13.5px;
+  }
+  .footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="seam"></div>
+  <nav class="wrap">
+    <div class="logo">Awi<span>·</span>Hegesztés</div>
+    <div class="navlinks">
+      <a href="#rolunk" class="hide-mobile">Rólunk</a>
+      <!-- SZERKESZTÉS ITT: legördülő "Hegesztések" menü a nav-ban.
+           Minden <a> egy hegesztéstípus - a szöveget és a href célt (pl. #weld-migmag)
+           itt tudod módosítani vagy újat hozzáadni ugyanezzel a mintával. -->
+      <div class="nav-dropdown hide-mobile" tabindex="0">
+        <a href="#hegesztesek">Hegesztések</a>
+        <div class="dropdown-menu">
+          <a href="#weld-migmag">
+            <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 18 L11 8 L15 13 L20 5"/><circle cx="20" cy="5" r="1.6" fill="currentColor" stroke="none"/><circle cx="9" cy="11" r="1" fill="currentColor" stroke="none"/></svg>
+            MIG/MAG hegesztés
+          </a>
+          <a href="#weld-ivhegesztes">
+            <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 19 L11 6 L9 13 L17 13 L13 5"/></svg>
+            Ívhegesztés
+          </a>
+          <a href="#weld-tig">
+            <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>
+            TIG hegesztés
+          </a>
+          <a href="#weld-pont">
+            <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg>
+            Ponthegesztés
+          </a>
+          <a href="#weld-robot">
+            <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="15" width="4" height="4" rx="1"/><path d="M7 15 V9 H16 V13"/><circle cx="18" cy="13" r="2"/></svg>
+            Robothegesztés
+          </a>
+        </div>
+      </div>
+      <a href="#szolgaltatasok">Szolgáltatások</a>
+      <a href="#arajanlat">Árak</a>
+      <a href="#kapcsolat" class="nav-cta">Árajánlatot kérek</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero" id="rolunk">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow-plain">Ipari hegesztés és fémszerkezet-gyártás</p>
+      <h1 id="heroTitle">Ahol az acél <em>tartós</em> kötést kap</h1>
+      <img id="heroImage" src="" alt="" style="display:none; width:100%; max-width:480px; border-radius:3px; margin:20px 0;" />
+      <p class="lead" id="heroLead">
+        Az Awi Hegesztés MIG/MAG és ívhegesztési technológiával készít egyedi
+        fémszerkezeteket, gépipari alkatrészeket és ipari csarnokelemeket —
+        helyszíni kiszállással és teljes körű minőségi tanúsítvánnyal.
+      </p>
+      <div class="hero-actions">
+        <a href="#arajanlat" class="btn btn-primary">Árajánlat kérése</a>
+        <a href="#szolgaltatasok" class="btn btn-ghost">Szolgáltatásaink</a>
+      </div>
+    </div>
+    <div class="hero-figure">
+      <div class="weld-badge">
+        <div class="stat">14 év</div>
+        <div class="stat-label">tapasztalat ipari hegesztésben</div>
+      </div>
+      <div class="weld-badge">
+        <div class="stat">300+</div>
+        <div class="stat-label">lezárt projekt gyárépítőknek és beruházóknak</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SZERKESZTÉS ITT: a "Hegesztési eljárások" részletes szekció.
+     Minden .service-card egy hegesztéstípus - a cím (h3), a leírás (p) és az
+     ikon (svg path) itt módosítható. Az id (pl. weld-migmag) kösd össze a
+     fenti nav dropdown megfelelő href-jével, ha átnevezed. -->
+<section class="section" id="hegesztesek">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Hegesztési eljárások</h2>
+      <p>Az anyagtól és a feladattól függően más-más hegesztési technológia a legmegfelelőbb — ezekkel dolgozunk nap mint nap.</p>
+    </div>
+    <div class="services-grid" id="weldTypesGrid">
+      <div class="service-card" id="weld-migmag">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#e8672b" stroke-width="1.4" style="margin-bottom:14px;"><path d="M4 18 L11 8 L15 13 L20 5"/><circle cx="20" cy="5" r="1.6" fill="#e8672b" stroke="none"/><circle cx="9" cy="11" r="1" fill="#e8672b" stroke="none"/></svg>
+        <h3>MIG/MAG hegesztés</h3>
+        <p>Gyors, tiszta varratú eljárás szén- és ötvözött acélokhoz, ipari sorozatgyártásra és helyszíni javításra egyaránt.</p>
+      </div>
+      <div class="service-card" id="weld-ivhegesztes">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#e8672b" stroke-width="1.4" style="margin-bottom:14px;"><path d="M5 19 L11 6 L9 13 L17 13 L13 5"/></svg>
+        <h3>Ívhegesztés</h3>
+        <p>Bevont elektródás technológia vastagabb anyagokhoz és helyszíni, kedvezőtlen körülmények közötti munkákhoz.</p>
+      </div>
+      <div class="service-card" id="weld-tig">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#e8672b" stroke-width="1.4" style="margin-bottom:14px;"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.4" fill="#e8672b" stroke="none"/></svg>
+        <h3>TIG hegesztés</h3>
+        <p>Precíz, esztétikus varrat vékonyabb lemezekhez, saválló és alumínium szerkezetekhez.</p>
+      </div>
+      <div class="service-card" id="weld-pont">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#e8672b" stroke-width="1.4" style="margin-bottom:14px;"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg>
+        <h3>Ponthegesztés</h3>
+        <p>Gyors, pontszerű kötés vékony lemezekhez, sorozatgyártott elemek gyors összeépítéséhez.</p>
+      </div>
+      <div class="service-card" id="weld-robot">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#e8672b" stroke-width="1.4" style="margin-bottom:14px;"><rect x="5" y="15" width="4" height="4" rx="1"/><path d="M7 15 V9 H16 V13"/><circle cx="18" cy="13" r="2"/></svg>
+        <h3>Robothegesztés</h3>
+        <p>Ismétlődő, nagy pontosságot igénylő varratokhoz, egyenletes minőséggel, nagyobb darabszám esetén.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="szolgaltatasok" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Amivel dolgozunk</h2>
+      <p>Kis sorozattól az egyedi ipari szerkezetig — minden hegesztési feladatot vállalunk, a tervezéstől az összeszerelésig.</p>
+    </div>
+    <div class="services-grid" id="servicesGrid">
+      <div class="service-card">
+        <div class="num">01</div>
+        <h3>MIG/MAG hegesztés</h3>
+        <p>Szén- és ötvözött acél szerkezetek gyors, tiszta varratú összeépítése, gyártásra és helyszíni javításra egyaránt.</p>
+      </div>
+      <div class="service-card">
+        <div class="num">02</div>
+        <h3>Ipari acélszerkezetek</h3>
+        <p>Csarnokvázak, tartókonzolok, lépcsők és korlátok gyártása műszaki tervek alapján, teherbírás-számítással.</p>
+      </div>
+      <div class="service-card">
+        <div class="num">03</div>
+        <h3>Egyedi fémmegmunkálás</h3>
+        <p>Egyedi méretű alkatrészek, tartók és gépelemek hajlítása, vágása, hegesztése rajz vagy minta alapján.</p>
+      </div>
+      <div class="service-card">
+        <div class="num">04</div>
+        <h3>Helyszíni kiszállás</h3>
+        <p>Mobil hegesztőfelszereléssel dolgozunk az Ön telephelyén, ha a szerkezet nem mozgatható a műhelybe.</p>
+      </div>
+      <div class="service-card">
+        <div class="num">05</div>
+        <h3>Karbantartás, javítás</h3>
+        <p>Elhasználódott vagy sérült fémszerkezetek, gépalapok és tartóelemek felújítása, megerősítése.</p>
+      </div>
+      <div class="service-card">
+        <div class="num">06</div>
+        <h3>Minőségbiztosítás</h3>
+        <p>Minden varratról jegyzőkönyv és tanúsítvány készül, igény szerint roncsolásmentes vizsgálattal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section pricing" id="arajanlat">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Árazási csomagok</h2>
+      <p>Tájékoztató kiindulási árak. A pontos díjat a szerkezet mérete, anyaga és a helyszíni körülmények határozzák meg — ehhez kérjen egyedi árajánlatot.</p>
+    </div>
+    <div class="price-grid" id="pricingGrid">
+      <div class="price-card">
+        <div class="tag">Alap</div>
+        <h3>Felmérés és kisebb javítás</h3>
+        <div class="price">15 000 Ft<small> / kiszállástól</small></div>
+        <ul>
+          <li>Helyszíni felmérés és szaktanácsadás</li>
+          <li>Kisebb varrat javítása, törés hegesztése</li>
+          <li>Egy munkanapos átfutás</li>
+        </ul>
+        <a href="#kapcsolat" class="btn btn-ghost">Ezt kérem</a>
+      </div>
+      <div class="price-card is-featured">
+        <div class="tag">Legnépszerűbb</div>
+        <h3>Ipari szerkezet gyártása</h3>
+        <div class="price">Egyedi ár<small> / méret és anyag alapján</small></div>
+        <ul>
+          <li>Tervezés vagy meglévő rajz alapján gyártás</li>
+          <li>MIG/MAG hegesztés minőségi tanúsítvánnyal</li>
+          <li>Helyszíni összeszerelés</li>
+          <li>Garanciális utómunka</li>
+        </ul>
+        <a href="#kapcsolat" class="btn btn-primary">Árajánlatot kérek</a>
+      </div>
+      <div class="price-card">
+        <div class="tag">Vállalati</div>
+        <h3>Folyamatos partnerség</h3>
+        <div class="price">Havi keretszerződés</div>
+        <ul>
+          <li>Rendszeres karbantartási ütemterv</li>
+          <li>Kiemelt kiszállási időpontok</li>
+          <li>Kedvezményes anyag- és munkadíj</li>
+        </ul>
+        <a href="#kapcsolat" class="btn btn-ghost">Egyeztetek időpontot</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section offer" id="kapcsolat">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Kérjen árajánlatot</h2>
+      <p>Írja le a feladatot, csatolja a méreteket vagy a rajzot — 1 munkanapon belül válaszolunk.</p>
+    </div>
+    <div class="offer-shell">
+      <div>
+        <h3>Mit érdemes megadni?</h3>
+        <p>Minél pontosabb a leírás, annál pontosabb árat tudunk adni már az első körben.</p>
+        <div class="offer-facts">
+          <div><b>Anyag</b> Acél, alumínium, saválló</div>
+          <div><b>Méret</b> Hozzávetőleges hossz / vastagság</div>
+          <div><b>Helyszín</b> Műhelyben vagy telephelyen</div>
+          <div><b>Határidő</b> Mikorra van szükség a munkára</div>
+        </div>
+      </div>
+      <form id="offerForm">
+        <div class="row2">
+          <div class="field">
+            <label for="name">Név</label>
+            <input id="name" type="text" placeholder="Kovács Béla" required>
+          </div>
+          <div class="field">
+            <label for="phone">Telefonszám</label>
+            <input id="phone" type="tel" placeholder="+36 30 000 0000" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="email">E-mail cím</label>
+          <input id="email" type="email" placeholder="nev@ceg.hu" required>
+        </div>
+        <div class="field">
+          <label for="details">A feladat leírása</label>
+          <textarea id="details" placeholder="Pl.: 8 méteres acél korlát gyártása és helyszíni szerelése..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" id="offerSubmitBtn">Árajánlat kérése</button>
+        <p id="formMsg" style="display:none; color:#3a7d3a; font-size:13.5px; margin-top:-4px;">
+          Köszönjük! Munkatársunk hamarosan felveszi Önnel a kapcsolatot.
+        </p>
+        <p id="formError" style="display:none; color:#b83b1f; font-size:13.5px; margin-top:-4px;">
+          Sikertelen küldés, próbáld újra kicsit később.
+        </p>
+      </form>
+      <script>
+        document.getElementById('offerForm').addEventListener('submit', async function (event) {
+          event.preventDefault();
+
+          const btn = document.getElementById('offerSubmitBtn');
+          const msg = document.getElementById('formMsg');
+          const err = document.getElementById('formError');
+          msg.style.display = 'none';
+          err.style.display = 'none';
+          btn.textContent = 'Küldés...';
+          btn.disabled = true;
+
+          const payload = {
+            customerName: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            email: document.getElementById('email').value,
+            description: document.getElementById('details').value,
+          };
+
+          try {
+            const response = await fetch('/api/orders', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) throw new Error('Sikertelen küldés');
+
+            msg.style.display = 'block';
+            event.target.reset();
+          } catch (e) {
+            err.style.display = 'block';
+          } finally {
+            btn.textContent = 'Árajánlat kérése';
+            btn.disabled = false;
+          }
+        });
+      </script>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="seam" style="margin-bottom:28px;"></div>
+  <div class="wrap footer-row">
+    <div class="logo" style="font-size:16px;">Awi<span>·</span>Hegesztés</div>
+    <div id="footerContact" style="font-size:13.5px;"></div>
+    <div>© 2026 Awi Hegesztés · Ipari hegesztés és fémmegmunkálás</div>
+  </div>
+</footer>
+<script>
+  function renderCardGrid(gridId, items) {
+    if (!items || !items.length) return;
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    grid.innerHTML = items
+      .map(
+        (item) => `
+          <div class="service-card">
+            <h3>${item.title}</h3>
+            <p>${item.description}</p>
+          </div>`
+      )
+      .join('');
+  }
+
+  function renderPricingGrid(items) {
+    if (!items || !items.length) return;
+    const grid = document.getElementById('pricingGrid');
+    if (!grid) return;
+    grid.innerHTML = items
+      .map(
+        (pkg, i) => `
+          <div class="price-card ${i === 1 ? 'is-featured' : ''}">
+            <div class="tag">${pkg.name}</div>
+            <h3>${pkg.title}</h3>
+            <div class="price">${pkg.price}</div>
+            <ul>
+              ${pkg.features
+                .split('\n')
+                .filter(Boolean)
+                .map((f) => `<li>${f}</li>`)
+                .join('')}
+            </ul>
+            <a href="#kapcsolat" class="btn ${i === 1 ? 'btn-primary' : 'btn-ghost'}">
+              ${i === 1 ? 'Árajánlatot kérek' : 'Ezt kérem'}
+            </a>
+          </div>`
+      )
+      .join('');
+  }
+
+  fetch('/api/site-content')
+    .then((response) => response.json())
+    .then((content) => {
+      document.getElementById('heroLead').textContent = content.heroLead;
+
+      const titleEl = document.getElementById('heroTitle');
+      titleEl.innerHTML = content.heroTitle.replace(
+        /(tartós|folytatólagos|erős)/i,
+        '<em>$1</em>'
+      );
+      if (!titleEl.querySelector('em')) {
+        titleEl.textContent = content.heroTitle;
+      }
+
+      const contactParts = [];
+      if (content.contactPhone) contactParts.push(content.contactPhone);
+      if (content.contactEmail) contactParts.push(content.contactEmail);
+      document.getElementById('footerContact').textContent = contactParts.join(' · ');
+
+      if (content.heroImageUrl) {
+        const img = document.getElementById('heroImage');
+        img.src = content.heroImageUrl;
+        img.alt = content.heroTitle;
+        img.style.display = 'block';
+      }
+
+      renderCardGrid('weldTypesGrid', content.weldTypes);
+      renderCardGrid('servicesGrid', content.services);
+      renderPricingGrid(content.pricing);
+    })
+    .catch(() => {
+      // Ha a backend nem elérhető, az oldal a beégetett alapszöveggel jelenik meg.
+    });
+</script>
+</body>
+</html>

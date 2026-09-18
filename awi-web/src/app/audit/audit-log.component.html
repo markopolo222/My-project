@@ -1,0 +1,23 @@
+<div class="audit-page">
+    <h1>Napló</h1>
+    <p class="subtitle">Ki, mikor, mit módosított az admin felületen.</p>
+  
+    <p *ngIf="loading">Betöltés...</p>
+    <p *ngIf="error" class="error">{{ error }}</p>
+  
+    <table *ngIf="!loading && entries.length" class="audit-table">
+      <thead>
+        <tr><th>Felhasználó</th><th>Művelet</th><th>Részletek</th><th>Időpont</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of entries">
+          <td>{{ entry.username }}</td>
+          <td>{{ entry.action }}</td>
+          <td>{{ entry.details }}</td>
+          <td>{{ entry.createdAt | date: 'yyyy.MM.dd HH:mm' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <p *ngIf="!loading && !entries.length">Még nincs naplózott esemény.</p>
+  </div>

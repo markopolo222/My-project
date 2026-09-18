@@ -1,0 +1,77 @@
+:host{
+    display: block;
+}
+
+.admin-shell {
+    display: flex;
+    min-height: 100vh;
+    background: #ece7dd;
+}
+
+.sidebar{
+    width: 240px;
+    flex-shrink: 0;
+    background: #201d1a;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 20px;
+}
+
+.sidebar-logo{
+    font-family: 'Archivo Expanded', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #ece7dd;
+    margin-bottom: 36px;
+}
+
+.sidebar-nav{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-grow: 1;
+}
+
+.sidebar-nav a {
+    color: #d9d2c3;
+    text-decoration: none;
+    font-size: 14.5px;
+    font-weight: 500;
+    padding: 11px 14px;
+    border-radius: 3px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+   
+  .sidebar-nav a:hover {
+    background: #2b2723;
+    color: #ece7dd;
+  }
+   
+  .sidebar-nav a.active {
+    background: #2b2723;
+    color: #e8672b;
+  }
+   
+  .logout-btn {
+    margin-top: auto;
+    background: transparent;
+    border: 1px solid #3a352f;
+    color: #d9d2c3;
+    padding: 11px 14px;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+   
+  .logout-btn:hover {
+    border-color: #e8672b;
+    color: #e8672b;
+  }
+   
+  .admin-content {
+    flex-grow: 1;
+    padding: 40px 48px;
+    overflow-y: auto;
+  }

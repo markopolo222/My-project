@@ -1,0 +1,63 @@
+<div class="orders-page">
+  <div class="orders-header">
+    <h1>Rendelések</h1>
+    <button class="btn-export" (click)="exportCsv()">Export CSV</button>
+  </div>
+
+  @if (loading) {
+    <p>Betöltés...</p>
+  } @else if (error) {
+    <p class="error">{{ error }}</p>
+  } @else if (orders.length === 0) {
+    <p>Még nincs beérkezett rendelés.</p>
+  } @else {
+    <div class="orders-list">
+      @for (order of orders; track order.id) {
+        <div class="order-card">
+          <div class="order-summary" (click)="toggleExpand(order)">
+            <div class="col name">{{ order.customerName }}</div>
+            <div class="col contact">{{ order.phone }} · {{ order.email }}</div>
+            <div class="col desc">{{ order.description }}</div>
+            <div class="col date">{{ order.createdAt | date: 'yyyy.MM.dd' }}</div>
+            <select
+              [ngModel]="order.status"
+              (ngModelChange)="changeStatus(order, $event)"
+              (click)="$event.stopPropagation()"
+              class="status-select"
+              [class]="'status-' + order.status"
+            >
+              <option value="uj">Új</option>
+              <option value="folyamatban">Folyamatban</option>
+              <option value="kesz">Kész</option>
+              <option value="lemondva">Lemondva</option>
+            </select>
+          </div>
+
+          @if (expandedId === order.id) {
+            <div class="order-details">
+              <div class="detail-row">
+                <label>Határidő</label>
+                <input type="date" [(ngModel)]="order.dueDate" (change)="saveDetails(order)" />
+              </div>
+              <div class="detail-row">
+                <label>Belső jegyzet (csak adminnak látszik)</label>
+                <textarea [(ngModel)]="order.internalNote" (blur)="saveDetails(order)"></textarea>
+              </div>
+              <div class="detail-row">
+                <label>Csatolmány</label>
+                @if (order.attachmentUrl) {
+                  <a [href]="order.attachmentUrl" target="_blank" class="attachment-link">Megnyitás</a>
+                }
+                <input type="file" (change)="onAttachmentSelected(order, $event)" />
+              </div>
+              <div class="detail-actions">
+                <button (click)="downloadQuotePdf(order)">Árajánlat PDF</button>
+                <button class="danger" (click)="confirmDelete(order)">Rendelés törlése</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

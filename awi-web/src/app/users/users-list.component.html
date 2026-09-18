@@ -1,0 +1,35 @@
+<div class="users-page">
+    <div class="users-header">
+        <h1>Felhasználók</h1>
+        <a routerLink="/users/new" class="btn btn-primary">Új felhasználó</a>
+</div>
+
+<p *ngIf="loading">Betöltés...</p>
+<p *ngIf="error" class="error">{{ error }}</p>
+
+<table *ngIf="!loading && users.length" class="users-table">
+
+    <thead>
+        <tr>
+            <th>Név</th>
+            <th>E-mail</th>
+            <th>Szerepkör</th>
+            <th>Létrehozva</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users">
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
+            <td>{{ user.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td class="actions">
+                <a routerLink="/users/{{ user.id }}" class="btn btn-primary">Szerkesztés</a>
+                <button (click)="confirmDelete(user)" class="btn btn-danger">Törlés</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<p *ngIf="!loading && users.length === 0">Nincs felhasználó</p>

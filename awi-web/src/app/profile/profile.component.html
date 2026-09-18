@@ -1,0 +1,26 @@
+<div class="profile-page">
+    <h1>Profilom</h1>
+    <p class="username">Bejelentkezve mint: <strong>{{ currentUser?.username }}</strong> ({{ currentUser?.role }})</p>
+  
+    <form (ngSubmit)="onSubmit()">
+      <h2>Jelszó módosítása</h2>
+  
+      <p *ngIf="error" class="error">{{ error }}</p>
+      <p *ngIf="saved" class="success">A jelszó frissítve.</p>
+  
+      <div class="field">
+        <label for="currentPassword">Jelenlegi jelszó</label>
+        <input id="currentPassword" type="password" [(ngModel)]="currentPassword" name="currentPassword" />
+      </div>
+      <div class="field">
+        <label for="newPassword">Új jelszó</label>
+        <input id="newPassword" type="password" [(ngModel)]="newPassword" name="newPassword" />
+      </div>
+      <div class="field">
+        <label for="newPasswordAgain">Új jelszó mégegyszer</label>
+        <input id="newPasswordAgain" type="password" [(ngModel)]="newPasswordAgain" name="newPasswordAgain" />
+      </div>
+  
+      <button type="submit" [disabled]="saving">{{ saving ? 'Mentés...' : 'Jelszó mentése' }}</button>
+    </form>
+  </div>
